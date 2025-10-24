@@ -1,0 +1,104 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+library(safeRview) # load package's functions inside the README.Rmd file
+```
+
+# safeRview 📦
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+> An R package for summarizing and visualizing clinical trial adverse event (AE) data.
+
+**Note:** This package is a portfolio project built to demonstrate core skills in R package development, data visualization, and statistical analysis within a pharmaceutical context. It is the foundation for an interactive Shiny dashboard.
+
+---
+
+## Installation
+
+You can install the development version of safeRview from [GitHub](https://github.com/rodb76/safeRview) with:
+
+```r
+# install.packages("devtools")
+devtools::install_github("rodb76/safeRview")
+```
+
+---
+
+## Example Usage
+
+This package contains all the functions needed to go from raw CDISC-like data to publication-ready plots.
+
+```{r summarize}
+
+# 1. Load the example datasets built into the package
+data(adsl)
+data(adae)
+
+# 2. Create the summary analysis table
+ae_table <- summarize_ae_data(adsl, adae)
+
+print(head(ae_table))
+```
+
+
+# 3. Create a bar chart of the Top 10 AEs
+```{r barchart, echo = FALSE}
+p_bar <- plot_ae_barchart(ae_table, top_n = 10)
+
+print(p_bar)
+```
+
+# 4. Create a volcano plot comparing two arms
+
+```{r volcano, echo = FALSE}
+p_volcano <- plot_ae_volcano(
+  adsl = adsl,
+  adae = adae,
+  treatment_arm = "A: Drug X",
+  comparator_arm = "B: Placebo"
+)
+
+print(p_volcano)
+```
+
+
+
+
+---
+
+## Core Components
+
+This package demonstrates several key software development practices:
+
+* **`data-raw/DATA.R`**: The script used to generate and process the `adsl.rda` and `adae.rda` example datasets.
+* **`R/`**: Contains all core functions, separated by concern:
+    * `summarize_ae.R`: Holds the `tidyverse`-based analysis function (`summarize_ae_data`).
+    * `plot_ae.R`: Holds the `ggplot2` visualization functions (`plot_ae_barchart`, `plot_ae_volcano`).
+* **Documentation**: All functions are documented using `roxygen2`, which generates the package `NAMESPACE` and help files (`.Rd`).
+* **Testing**: The package includes a full suite of unit tests in the `tests/testthat/` directory to validate the analysis and plotting functions. You can run these locally with `devtools::test()`.
+
+---
+
+## Next Steps: Shiny Dashboard
+
+The next phase of this project is to build an interactive Shiny application that uses this package as its analytical engine. This will demonstrate skills in:
+
+* Shiny UI/Server development
+* Reactive programming
+* Interactive plotting with `plotly`
+* Application deployment on `shinyapps.io`
+
+
