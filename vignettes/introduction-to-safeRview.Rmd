@@ -1,0 +1,94 @@
+---
+title: "Introduction to safeRview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to safeRview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+library(safeRview)
+```
+
+## Introduction
+
+The `safeRview` package provides a set of tools to analyze and visualize 
+adverse event (AE) data from clinical trials. It contains functions for 
+creating summary tables and plots, as well as an interactive Shiny 
+dashboard for data exploration.
+
+## Full Analysis Workflow
+
+This vignette demonstrates the main analytical workflow, from loading 
+data to creating visualizations.
+
+### 1. Load Data
+
+The package includes example `adsl` (Subject-Level) and `adae` (Adverse 
+Event) datasets.
+
+```{r loaddata}
+library(safeRview)
+
+data(adsl)
+data(adae)
+```
+
+### 2. Summarize Adverse Events
+
+The core function is `summarize_ae_data()`. It takes the `adsl` and `adae`
+data frames and calculates the count (n) and percentage (pct) of subjects 
+in each treatment arm who experienced each event.
+
+```{r summarize}
+ae_table <- summarize_ae_data(adsl, adae)
+
+# Show the first few rows
+head(ae_table)
+```
+
+### 3. Plot Top AEs
+
+You can use the `plot_ae_barchart()` function to visualize the most 
+frequent adverse events.
+
+```{r barchart, fig.width=7, fig.height=5}
+plot_ae_barchart(ae_table, top_n = 10)
+```
+
+### 4. Create a Volcano Plot
+
+The `plot_ae_volcano()` function performs a statistical test (Fisher's 
+Exact Test) to compare two arms and visualizes the risk difference 
+versus statistical significance.
+
+```{r volcano, fig.width=7, fig.height=5}
+plot_ae_volcano(
+  adsl = adsl,
+  adae = adae,
+  treatment_arm = "A: Drug X",
+  comparator_arm = "B: Placebo"
+)
+```
+
+## Launching the Interactive App
+
+For a fully interactive experience, you can launch the Shiny dashboard 
+using the `launch_app()` function.
+
+*Note: The code chunk below is set to `eval = FALSE` so it doesn't try 
+to launch the app while building the vignette. You can run it 
+in your console.*
+
+```{r launch, eval = FALSE}
+# This will open the dashboard in a new window
+launch_app()
+```
+
+This app provides an interactive interface to all the functions 
+demonstrated above.
